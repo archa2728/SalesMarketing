@@ -1,0 +1,118 @@
+
+<div class="app-container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-icon">SM</div>
+
+      <div class="brand-details">
+        <h2>SalesMarketing</h2>
+        <span>Management System</span>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Navigation -->
+    <div class="menu-heading">WORKSPACE</div>
+
+    <nav class="navigation">
+
+      <a
+        *ngIf="adminRole === 1"
+        routerLink="/salesman"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <span class="menu-icon">
+          <i class="fa-solid fa-users"></i>
+        </span>
+
+        <span>Salesman</span>
+      </a>
+
+      <a
+        *ngIf="adminRole === 2"
+        routerLink="/marketing-team"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <span class="menu-icon">
+          <i class="fa-solid fa-chart-line"></i>
+        </span>
+
+        <span>Marketing Team</span>
+      </a>
+
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+
+      <div class="account-label">
+        <span class="online-indicator"></span>
+        Logged in as
+      </div>
+
+      <div class="account-name">
+        {{ localStorageUsername }}
+      </div>
+
+      <button
+        type="button"
+        class="logout-button"
+        (click)="logout()">
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Logout</span>
+
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- Main Area -->
+  <div class="main-area">
+
+    <!-- Topbar -->
+    <header class="topbar">
+
+      <div class="breadcrumb">
+        <span>Workspace</span>
+        <i class="fa-solid fa-chevron-right"></i>
+
+        <strong>
+          {{ adminRole === 1 ? 'Salesman' : 'Marketing Team' }}
+        </strong>
+      </div>
+
+      <div class="user-profile">
+
+        <div class="avatar">
+          {{ localStorageUsername.charAt(0).toUpperCase() }}
+        </div>
+
+        <div class="user-details">
+          <strong>{{ localStorageUsername }}</strong>
+
+          <span>
+            {{ adminRole === 1 ? 'Salesman Admin' : 'Marketing Team Admin' }}
+          </span>
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- Page Content -->
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>

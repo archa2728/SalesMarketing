@@ -1,0 +1,238 @@
+
+<div class="page-container">
+
+  <!-- Page Heading -->
+  <div class="page-heading">
+    <div class="heading-content">
+      <div class="breadcrumb">
+        <span>Marketing Teams</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="current-page">Team Details</span>
+      </div>
+
+      <h1 class="page-title">Marketing Team Details</h1>
+      <p class="page-description">
+        View marketing team information and assigned salesmen.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <button type="button" class="back-button" (click)="goBack()">
+        <span class="button-icon">←</span>
+        Back to List
+      </button>
+
+      <button
+        type="button"
+        class="edit-button"
+        *ngIf="team"
+        (click)="editTeam()">
+        <span class="button-icon">✎</span>
+        Edit Team
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="message-card loading-card" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+    <p>Loading marketing team details...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="message-card error-card" *ngIf="errorMessage && !isLoading">
+    <div class="message-icon">!</div>
+    <h3>Unable to load team details</h3>
+    <p>{{ errorMessage }}</p>
+    <button type="button" class="retry-button" (click)="retryLoading()">
+      Try Again
+    </button>
+  </div>
+
+  <ng-container *ngIf="team as data">
+
+    <!-- Team Information -->
+    <div class="content-card">
+
+      <div class="section-heading">
+        <div>
+          <h2>Team Information</h2>
+          <p>Basic information about this marketing team.</p>
+        </div>
+
+        <span
+          class="status-badge"
+          [class.active]="data.status === 1"
+          [class.inactive]="data.status !== 1">
+          <span class="status-dot"></span>
+          {{ getStatusText(data.status) }}
+        </span>
+      </div>
+
+      <div class="team-info-grid">
+
+        <div class="info-item">
+          <label>Team Code</label>
+          <p class="team-code">{{ data.teamCode }}</p>
+        </div>
+
+        <div class="info-item">
+          <label>Team Name</label>
+          <p>{{ data.teamName }}</p>
+        </div>
+
+        <div class="info-item">
+          <label>Team Leader</label>
+          <p>{{ data.teamLeaderName || '-' }}</p>
+        </div>
+
+        <div class="info-item">
+          <label>Created Date</label>
+          <p>{{ data.createdDate | date:'dd-MMM-yyyy' }}</p>
+        </div>
+
+        <div class="info-item description-item">
+          <label>Description</label>
+          <p>{{ data.description || 'No description available.' }}</p>
+        </div>
+
+        <div class="info-item" *ngIf="data.modifiedDate">
+          <label>Last Modified</label>
+          <p>{{ data.modifiedDate | date:'dd-MMM-yyyy' }}</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-grid">
+
+      <div class="summary-card">
+        <div class="summary-icon members-icon">
+          <span>👥</span>
+        </div>
+        <div>
+          <label>Total Members</label>
+          <h3>{{ data.members.length }}</h3>
+          <p>Assigned salesmen</p>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-icon target-icon">
+          <span>₹</span>
+        </div>
+        <div>
+          <label>Total Target Amount</label>
+          <h3>{{ totalTargetAmount | number:'1.2-2' }}</h3>
+          <p>Combined member targets</p>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-icon active-icon">
+          <span>✓</span>
+        </div>
+        <div>
+          <label>Active Members</label>
+          <h3>{{ activeMemberCount }}</h3>
+          <p>Currently active</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Team Members -->
+    <div class="content-card members-card">
+
+      <div class="section-heading">
+        <div>
+          <h2>Team Members</h2>
+          <p>List of salesmen assigned to this marketing team.</p>
+        </div>
+
+        <span class="member-count">
+          {{ data.members.length }} Members
+        </span>
+      </div>
+
+      <div class="table-container">
+        <table class="members-table">
+
+          <thead>
+            <tr>
+              <th>Salesman Code</th>
+              <th>Salesman Name</th>
+              <th>Role</th>
+              <th class="text-right">Target Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let member of data.members">
+              <td>
+                <span class="salesman-code">
+                  {{ member.salesmanCode }}
+                </span>
+              </td>
+
+              <td>
+                <span class="salesman-name">
+                  {{ member.salesmanName }}
+                </span>
+              </td>
+
+              <td>
+                <span class="role-badge"
+                  [class.leader-role]="member.role === 1">
+                  {{ getRoleText(member.role) }}
+                </span>
+              </td>
+
+              <td class="text-right target-amount">
+                {{ member.targetAmount | number:'1.2-2' }}
+              </td>
+
+              <td>
+                <span
+                  class="status-badge member-status"
+                  [class.active]="member.status === 1"
+                  [class.inactive]="member.status !== 1">
+                  <span class="status-dot"></span>
+                  {{ getStatusText(member.status) }}
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="data.members.length === 0">
+              <td colspan="5" class="empty-message">
+                <div class="empty-content">
+                  <span class="empty-icon">👥</span>
+                  <strong>No team members found</strong>
+                  <p>There are currently no salesmen assigned to this team.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <td colspan="3" class="total-label">
+                Total Target Amount
+              </td>
+
+              <td class="text-right total-amount">
+                {{ totalTargetAmount | number:'1.2-2' }}
+              </td>
+
+              <td></td>
+            </tr>
+          </tfoot>
+
+        </table>
+      </div>
+    </div>
+
+  </ng-container>
+</div>
