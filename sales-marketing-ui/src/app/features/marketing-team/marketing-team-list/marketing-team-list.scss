@@ -1,0 +1,1299 @@
+/* =========================================
+   MARKETING TEAM PAGE
+========================================= */
+
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.page-container {
+  min-height: 100%;
+  padding: 28px;
+  background: #f5f7fb;
+  color: #263445;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+.page-title {
+  margin: 0 0 7px;
+  color: #172b4d;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.page-description {
+  margin: 0;
+  color: #718096;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.primary-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 19px;
+  border: 1px solid #2865ad;
+  border-radius: 8px;
+  background: #2865ad;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #1f528f;
+  border-color: #1f528f;
+  box-shadow: 0 4px 10px rgba(40, 101, 173, 0.18);
+}
+
+.primary-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondary-btn {
+  min-height: 40px;
+  padding: 9px 18px;
+  border: 1px solid #d5deea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.secondary-btn:hover {
+  background: #f5f8fc;
+  border-color: #b8c6d8;
+}
+
+/* =========================================
+   SEARCH AND FILTER TOOLBAR
+========================================= */
+
+// .filter-section {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   gap: 18px;
+//   padding: 18px 20px;
+//   margin-bottom: 22px;
+//   background: #ffffff;
+//   border: 1px solid #e8edf4;
+//   border-radius: 12px;
+//   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+// }
+
+// .search-box {
+//   flex: 1;
+//   max-width: 430px;
+// }
+
+// .search-box input {
+//   width: 100%;
+//   height: 42px;
+//   padding: 0 14px;
+//   border: 1px solid #dce3ec;
+//   border-radius: 8px;
+//   outline: none;
+//   background: #ffffff;
+//   color: #263445;
+//   font-family: inherit;
+//   font-size: 13px;
+//   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+// }
+
+// .search-box input::placeholder {
+//   color: #9aa7b7;
+// }
+
+// .search-box input:focus {
+//   border-color: #4384c6;
+//   box-shadow: 0 0 0 3px rgba(67, 132, 198, 0.12);
+// }
+
+// .status-filter {
+//   width: 180px;
+//   flex-shrink: 0;
+// }
+
+
+.filter-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  background: #ffffff;
+  border: 1px solid #e8edf4;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+}
+
+.search-box {
+  flex: 1;
+  max-width: 430px;
+}
+
+.search-box input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid #dce3ec;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #263445;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.search-box input:focus {
+  border-color: #4384c6;
+  box-shadow: 0 0 0 3px rgba(67, 132, 198, 0.12);
+}
+
+.status-filter {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 650px) {
+  .filter-section {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-box,
+  .status-filter {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+
+/* =========================================
+   SYNCFUSION DROPDOWN
+========================================= */
+
+:host ::ng-deep .e-dropdownlist,
+:host ::ng-deep .e-input-group {
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+:host ::ng-deep .e-input-group:not(.e-float-icon-left),
+:host ::ng-deep .e-input-group.e-control-wrapper {
+  border-color: #dce3ec;
+  border-radius: 8px;
+}
+
+:host ::ng-deep .e-input-group.e-control-wrapper.e-input-focus {
+  border-color: #4384c6;
+  box-shadow: 0 0 0 3px rgba(67, 132, 198, 0.10);
+}
+
+/* =========================================
+   GRID CONTAINER
+========================================= */
+
+.grid-container {
+  padding: 20px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e8edf4;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+}
+
+/* =========================================
+   SYNCFUSION GRID
+========================================= */
+
+:host ::ng-deep .e-grid {
+  border: none;
+  border-radius: 8px;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+:host ::ng-deep .e-grid .e-gridheader {
+  border: none;
+  background: #f7f9fc;
+}
+
+:host ::ng-deep .e-grid .e-headercontent {
+  border: none;
+}
+
+:host ::ng-deep .e-grid .e-headercell {
+  height: 48px;
+  background: #f7f9fc;
+  border-color: #edf1f6;
+}
+
+:host ::ng-deep .e-grid .e-headertext {
+  color: #526174;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+:host ::ng-deep .e-grid .e-rowcell {
+  height: 54px;
+  padding: 10px 12px;
+  color: #405168;
+  border-color: #edf1f6;
+  font-size: 13px;
+}
+
+:host ::ng-deep .e-grid .e-row:hover .e-rowcell {
+  background: #f7faff;
+}
+
+:host ::ng-deep .e-grid .e-altrow {
+  background: #ffffff;
+}
+
+:host ::ng-deep .e-grid .e-pager {
+  padding: 10px 4px 2px;
+  border: none;
+  border-top: 1px solid #edf1f6;
+  background: #ffffff;
+}
+
+:host ::ng-deep .e-grid .e-pager .e-numericitem {
+  border-radius: 6px;
+}
+
+:host ::ng-deep .e-grid .e-pager .e-currentitem {
+  border-radius: 6px;
+  background: #2865ad;
+}
+
+/* =========================================
+   TEAM CODE LINK
+========================================= */
+
+.team-code-link {
+  color: #2865ad;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.team-code-link:hover {
+  color: #174675;
+  text-decoration: underline;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.status-badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 76px;
+  padding: 5px 11px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.status-badge.active {
+  background: #e9f8ef;
+  border-color: #c9efd7;
+  color: #187344;
+}
+
+.status-badge.inactive {
+  background: #f1f3f6;
+  border-color: #e0e5eb;
+  color: #64748b;
+}
+
+/* =========================================
+   GRID ACTION BUTTONS
+========================================= */
+
+.action-link,
+.action-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30px;
+  margin: 2px;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.action-link {
+  background: #f0f6fd;
+  border-color: #dceafa;
+  color: #2865ad;
+}
+
+.action-link:hover {
+  background: #e2effc;
+}
+
+.edit-button {
+  background: #edf4ff;
+  border-color: #dce9fc;
+  color: #2865ad;
+}
+
+.edit-button:hover {
+  background: #dceaff;
+}
+
+.delete-button {
+  background: #fff1f0;
+  border-color: #ffe0dd;
+  color: #c43d38;
+}
+
+.delete-button:hover {
+  background: #ffe2df;
+}
+
+/* =========================================
+   DIALOG FORM SECTION HEADINGS
+========================================= */
+
+.form-section-title {
+  margin: 10px 0 18px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid #e8edf4;
+  color: #1e3554;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* =========================================
+   FORM GRID
+========================================= */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 19px 22px;
+  margin-bottom: 26px;
+}
+
+.form-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-field label {
+  color: #405168;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-field label span {
+  color: #dc4545;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 1px solid #d8e0ea;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #263445;
+  font-family: inherit;
+  font-size: 13px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field textarea {
+  min-height: 85px;
+  resize: vertical;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #a0acba;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #4384c6;
+  box-shadow: 0 0 0 3px rgba(67, 132, 198, 0.10);
+}
+
+.form-field input:disabled,
+.form-field select:disabled {
+  background: #f1f4f8;
+  color: #8995a5;
+  cursor: not-allowed;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.error-text {
+  color: #d83b3b;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.help-text {
+  display: block;
+  margin: 7px 0 13px;
+  color: #7b899a;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   ADD MEMBER SECTION
+========================================= */
+
+.add-member-section {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.2fr auto;
+  gap: 14px;
+  align-items: end;
+  padding: 18px;
+  margin-bottom: 13px;
+  background: #f7f9fc;
+  border: 1px solid #e5ebf3;
+  border-radius: 10px;
+}
+
+.add-member-section .form-field {
+  min-width: 0;
+}
+
+.add-member-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #2865ad;
+  border-radius: 7px;
+  background: #2865ad;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.add-member-button:hover {
+  background: #1f528f;
+}
+
+/* =========================================
+   TEAM MEMBERS TABLE
+========================================= */
+
+.member-grid-container {
+  width: 100%;
+  margin: 15px 0 12px;
+  overflow-x: auto;
+  border: 1px solid #e5ebf3;
+  border-radius: 9px;
+}
+
+.member-edit-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  background: #ffffff;
+  font-size: 12px;
+}
+
+.member-edit-table th {
+  padding: 13px 12px;
+  background: #f5f8fc;
+  color: #526174;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.member-edit-table td {
+  padding: 11px 12px;
+  border-top: 1px solid #edf1f6;
+  color: #405168;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.member-edit-table tbody tr:hover {
+  background: #f9fbfe;
+}
+
+.member-edit-table input,
+.member-edit-table select {
+  width: 100%;
+  min-width: 100px;
+  min-height: 34px;
+  padding: 6px 8px;
+  border: 1px solid #d8e0ea;
+  border-radius: 6px;
+  outline: none;
+  background: #ffffff;
+  color: #405168;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.member-edit-table input:focus,
+.member-edit-table select:focus {
+  border-color: #4384c6;
+  box-shadow: 0 0 0 2px rgba(67, 132, 198, 0.10);
+}
+
+.member-edit-table .delete-button {
+  min-height: 29px;
+  padding: 5px 9px;
+}
+
+.empty-members {
+  padding: 25px !important;
+  color: #8995a5 !important;
+  text-align: center !important;
+  font-size: 13px;
+}
+
+/* =========================================
+   TOTAL MEMBERS
+========================================= */
+
+.total-target {
+  display: flex;
+  justify-content: flex-end;
+  margin: 14px 0 20px;
+  color: #405168;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =========================================
+   DIALOG ACTIONS
+========================================= */
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 17px;
+  margin-top: 23px;
+  border-top: 1px solid #e8edf4;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 900px) {
+  .page-container {
+    padding: 20px;
+  }
+
+  .add-member-section {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .add-member-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 650px) {
+  .page-container {
+    padding: 14px;
+  }
+
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .page-header .primary-button {
+    width: 100%;
+  }
+
+  .filter-section {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 14px;
+  }
+
+  .search-box,
+  .status-filter {
+    width: 100%;
+    max-width: none;
+  }
+
+  .grid-container {
+    padding: 10px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .add-member-section {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .dialog-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .dialog-actions button {
+    width: 100%;
+  }
+}
+
+/* Marketing Team Dialog - Global Styles */
+
+.marketing-team-dialog.e-dialog {
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 55px rgba(15, 23, 42, 0.18) !important;
+  overflow: hidden;
+}
+
+.marketing-team-dialog .e-dlg-header-content {
+  padding: 19px 24px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e8edf4 !important;
+}
+
+.marketing-team-dialog .e-dlg-header {
+  color: #1e3554 !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.marketing-team-dialog .e-dlg-content {
+  padding: 22px 24px !important;
+  background: #ffffff !important;
+  color: #263445 !important;
+}
+
+.marketing-team-dialog .e-dlg-closeicon-btn {
+  border-radius: 7px !important;
+}
+
+.marketing-team-dialog .e-dlg-closeicon-btn:hover {
+  background: #f1f5f9 !important;
+}
+
+/* Toast Notifications */
+
+.toast-notification {
+  position: fixed;
+  top: 22px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  width: min(390px, calc(100vw - 32px));
+  padding: 15px 18px;
+  border: 1px solid #e8edf4;
+  border-left: 4px solid #16a36a;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.14);
+}
+
+.toast-notification.success {
+  border-left-color: #16a36a;
+}
+
+.toast-notification.error {
+  border-left-color: #dc4545;
+}
+
+.toast-notification.warning {
+  border-left-color: #e6a23c;
+}
+
+.toast-message {
+  color: #263445;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.toast-close {
+  border: none;
+  background: transparent;
+  color: #7b899a;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+
+/* =========================================
+   MODERN DELETE CONFIRMATION DIALOG
+========================================= */
+
+.marketing-confirm-dialog.e-dialog {
+  border: none !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18) !important;
+}
+
+.marketing-confirm-dialog .e-dlg-header-content {
+  min-height: 12px !important;
+  padding: 8px 14px 0 !important;
+  border: none !important;
+  background: #ffffff !important;
+}
+
+.marketing-confirm-dialog .e-dlg-header {
+  color: transparent !important;
+  font-size: 1px !important;
+}
+
+.marketing-confirm-dialog .e-dlg-closeicon-btn {
+  border-radius: 8px !important;
+}
+
+.marketing-confirm-dialog .e-dlg-closeicon-btn:hover {
+  background: #f1f5f9 !important;
+}
+
+.marketing-confirm-dialog .e-dlg-content {
+  padding: 12px 30px 28px !important;
+  background: #ffffff !important;
+}
+
+
+/* Dialog Content */
+
+.marketing-confirm-dialog .delete-confirm-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+
+/* Delete Icon */
+
+.marketing-confirm-dialog .delete-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  margin: 5px 0 18px;
+  border-radius: 50%;
+  background: #fff0ef;
+  color: #dc4545;
+}
+
+
+/* Heading */
+
+.marketing-confirm-dialog .delete-confirm-content h3 {
+  margin: 0 0 10px;
+  color: #1e293b;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+
+/* Description */
+
+.marketing-confirm-dialog .delete-description {
+  max-width: 340px;
+  margin: 0 0 22px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* Team Details */
+
+.marketing-confirm-dialog .delete-team-details {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 100%;
+  padding: 16px 18px;
+  margin-bottom: 17px;
+  border: 1px solid #e8edf4;
+  border-radius: 10px;
+  background: #f8fafc;
+  text-align: left;
+}
+
+.marketing-confirm-dialog .delete-team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.marketing-confirm-dialog .delete-detail-label {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.marketing-confirm-dialog .delete-team-info strong {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+
+/* Warning Message */
+
+.marketing-confirm-dialog .delete-warning {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 24px;
+  border: 1px solid #fde5c5;
+  border-radius: 8px;
+  background: #fffaf2;
+  color: #a16207;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.marketing-confirm-dialog .warning-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #fef0ce;
+  color: #b7791f;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+/* Action Buttons */
+
+.marketing-confirm-dialog .delete-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+}
+
+.marketing-confirm-dialog .delete-cancel-btn,
+.marketing-confirm-dialog .delete-confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 125px;
+  min-height: 42px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.marketing-confirm-dialog .delete-cancel-btn {
+  border: 1px solid #dbe2ea;
+  background: #ffffff;
+  color: #475569;
+}
+
+.marketing-confirm-dialog .delete-cancel-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.marketing-confirm-dialog .delete-confirm-btn {
+  border: 1px solid #dc4545;
+  background: #dc4545;
+  color: #ffffff;
+}
+
+.marketing-confirm-dialog .delete-confirm-btn:hover:not(:disabled) {
+  border-color: #c52f2f;
+  background: #c52f2f;
+  box-shadow: 0 4px 10px rgba(220, 69, 69, 0.18);
+}
+
+.marketing-confirm-dialog button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* Loading State */
+
+.marketing-confirm-dialog .delete-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.marketing-confirm-dialog .delete-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: deleteSpin 0.7s linear infinite;
+}
+
+@keyframes deleteSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* Responsive */
+
+@media (max-width: 480px) {
+  .marketing-confirm-dialog.e-dialog {
+    width: calc(100vw - 30px) !important;
+  }
+
+  .marketing-confirm-dialog .e-dlg-content {
+    padding: 12px 18px 22px !important;
+  }
+
+  .marketing-confirm-dialog .delete-confirm-actions {
+    flex-direction: column-reverse;
+  }
+
+  .marketing-confirm-dialog .delete-cancel-btn,
+  .marketing-confirm-dialog .delete-confirm-btn {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   PENDING SALESMAN REMOVAL REQUESTS
+========================================= */
+
+.removal-requests-container {
+  margin-top: 24px;
+}
+
+.grid-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.grid-title {
+  margin: 0 0 6px;
+  color: #1e3554;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.grid-description {
+  margin: 0;
+  color: #718096;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.request-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 85px;
+  padding: 7px 13px;
+  border: 1px solid #fde5c5;
+  border-radius: 20px;
+  background: #fffaf2;
+  color: #a16207;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.removal-requests-container .grid-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.removal-requests-container .edit-button {
+  background: #e9f8ef;
+  border-color: #c9efd7;
+  color: #187344;
+}
+
+.removal-requests-container .edit-button:hover:not(:disabled) {
+  background: #d5f2e0;
+}
+
+.removal-requests-container .action-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.removal-requests-container .delete-button:hover:not(:disabled) {
+  background: #ffe2df;
+}
+
+/* =========================================
+   REJECT REMOVAL REQUEST DIALOG
+========================================= */
+
+:host ::ng-deep .removal-reject-dialog.e-dialog {
+  border: none !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18) !important;
+}
+
+:host ::ng-deep .removal-reject-dialog .e-dlg-header-content {
+  padding: 19px 24px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e8edf4 !important;
+}
+
+:host ::ng-deep .removal-reject-dialog .e-dlg-header {
+  color: #1e3554 !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+}
+
+:host ::ng-deep .removal-reject-dialog .e-dlg-content {
+  padding: 22px 26px 26px !important;
+  background: #ffffff !important;
+}
+
+.reject-request-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reject-request-content h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.reject-request-content .delete-description {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.reject-request-content .delete-team-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 15px 17px;
+  border: 1px solid #e8edf4;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.reject-request-content .delete-team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.reject-request-content .delete-detail-label {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.reject-request-content .delete-team-info strong {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.reject-request-content .form-field {
+  margin-top: 5px;
+}
+
+.reject-request-content .form-field textarea {
+  min-height: 105px;
+  resize: vertical;
+}
+
+.reject-request-content .help-text {
+  margin: 2px 0 0;
+  text-align: right;
+}
+
+:host ::ng-deep .removal-reject-dialog .delete-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+:host ::ng-deep .removal-reject-dialog .delete-cancel-btn,
+:host ::ng-deep .removal-reject-dialog .delete-confirm-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 125px;
+  min-height: 42px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .removal-reject-dialog .delete-cancel-btn {
+  border: 1px solid #dbe2ea;
+  background: #ffffff;
+  color: #475569;
+}
+
+:host ::ng-deep .removal-reject-dialog .delete-cancel-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+:host ::ng-deep .removal-reject-dialog .delete-confirm-btn {
+  border: 1px solid #dc4545;
+  background: #dc4545;
+  color: #ffffff;
+}
+
+:host ::ng-deep .removal-reject-dialog .delete-confirm-btn:hover:not(:disabled) {
+  border-color: #c52f2f;
+  background: #c52f2f;
+}
+
+:host ::ng-deep .removal-reject-dialog button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   REMOVAL REQUEST RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 650px) {
+
+  .grid-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .request-count {
+    align-self: flex-start;
+  }
+
+  :host ::ng-deep .removal-reject-dialog .e-dlg-content {
+    padding: 18px !important;
+  }
+
+  :host ::ng-deep .removal-reject-dialog .delete-confirm-actions {
+    flex-direction: column-reverse;
+  }
+
+  :host ::ng-deep .removal-reject-dialog .delete-cancel-btn,
+  :host ::ng-deep .removal-reject-dialog .delete-confirm-btn {
+    width: 100%;
+  }
+
+}

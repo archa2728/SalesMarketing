@@ -1,0 +1,641 @@
+
+<div class="page-container">
+
+  <!-- =====================================
+       TOAST NOTIFICATION
+  ====================================== -->
+  @if (showToast) {
+    <div
+      class="toast-notification"
+      [class.success]="toastType === 'success'"
+      [class.error]="toastType === 'error'"
+      [class.warning]="toastType === 'warning'"
+      role="status"
+      aria-live="polite">
+
+      <div class="toast-icon">
+        @if (toastType === 'success') {
+          ✓
+        } @else {
+          !
+        }
+      </div>
+
+      <div class="toast-content">
+        <strong>
+          @if (toastType === 'success') {
+            Success
+          } @else if (toastType === 'warning') {
+            Warning
+          } @else {
+            Something went wrong
+          }
+        </strong>
+
+        <p>{{ toastMessage }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="toast-close"
+        aria-label="Close notification"
+        (click)="dismissNotification()">
+        ×
+      </button>
+
+    </div>
+  }
+
+
+  <!-- =====================================
+       PAGE HEADER
+  ====================================== -->
+  <div class="page-header">
+
+    <div class="page-heading-content">
+
+      <div class="page-title-icon">
+        <span>SM</span>
+      </div>
+
+      <div>
+        <h2 class="page-title">Salesman Master</h2>
+
+        <p class="page-description">
+          Manage salesman details, contact information and their status.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="header-actions">
+
+      <button
+        type="button"
+        class="primary-btn"
+        (click)="onNewSalesman()">
+
+        <span class="btn-icon">+</span>
+        New Salesman
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================
+       SEARCH AND FILTER TOOLBAR
+  ====================================== -->
+  <div class="filter-section">
+
+    <div class="search-wrapper">
+
+      <span class="search-icon" aria-hidden="true">⌕</span>
+
+      <input
+        type="text"
+        placeholder="Search by code, name or mobile..."
+        [value]="searchText"
+        (input)="onSearch($event)"
+        class="search-input"
+        aria-label="Search salesmen"
+      />
+
+    </div>
+
+    <div class="status-filter-wrapper">
+
+      <label class="filter-label">Status</label>
+
+      <ejs-dropdownlist
+        [dataSource]="statusOptions"
+        [value]="selectedStatus"
+        (change)="onStatusChange($event)"
+        placeholder="Filter by status"
+        width="150px">
+      </ejs-dropdownlist>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================
+       SALESMAN DATA GRID
+  ====================================== -->
+  <div class="grid-container">
+
+    <div class="grid-heading">
+      <div>
+        <h3 class="grid-title">Salesman Details</h3>
+        <p class="grid-description">
+          View and manage your registered salesmen.
+        </p>
+      </div>
+    </div>
+
+    <ejs-grid
+      #salesmanGrid
+      (dataStateChange)="onGridDataStateChange($event)"
+      [dataSource]="gridData"
+      [allowPaging]="true"
+      [allowSorting]="false"
+      [pageSettings]="pageSettings">
+
+      <e-columns>
+
+        <!-- Salesman Code -->
+         <e-column
+  field="salesmanCode"
+  headerText="Salesman Code"
+  width="150"
+  textAlign="Left">
+
+  <ng-template #template let-data>
+    <a
+      href="javascript:void(0)"
+      class="salesman-code-link"
+      (click)="onEditSalesman(data.id)">
+      {{ data.salesmanCode }}
+    </a>
+  </ng-template>
+
+</e-column>
+      
+        <!-- Salesman Name -->
+        <e-column
+          field="salesmanName"
+          headerText="Salesman Name"
+          width="180">
+        </e-column>
+
+        <!-- Mobile Number -->
+        <e-column
+          field="mobileNo"
+          headerText="Mobile"
+          width="140">
+        </e-column>
+
+        <!-- Email -->
+        <e-column
+          field="email"
+          headerText="Email"
+          width="190">
+        </e-column>
+
+        <!-- Joining Date -->
+        <e-column
+          field="joiningDate"
+          headerText="Joining Date"
+          width="130">
+        </e-column>
+
+        <!-- Status -->
+        <e-column
+          headerText="Status"
+          width="110">
+
+          <ng-template #template let-data>
+
+            <span
+              class="status-badge"
+              [class.active]="data.status === 'Active'"
+              [class.inactive]="data.status === 'Inactive'">
+
+              <span class="status-dot"></span>
+              {{ data.status }}
+
+            </span>
+
+          </ng-template>
+
+        </e-column>
+
+        <!-- Actions -->
+        <e-column
+          headerText="Actions"
+          width="150">
+
+          <ng-template #template let-data>
+
+            <div class="grid-actions">
+
+              <button
+                type="button"
+                class="action-btn edit-btn"
+                title="Edit salesman"
+                aria-label="Edit salesman"
+                (click)="onEditSalesman(data.id)">
+
+                Edit
+
+              </button>
+
+              <button
+                type="button"
+                class="action-btn delete-btn"
+                title="Delete salesman"
+                aria-label="Delete salesman"
+                (click)="onDeleteSalesman(data.id)">
+
+                Delete
+
+              </button>
+
+            </div>
+
+          </ng-template>
+
+        </e-column>
+
+      </e-columns>
+
+    </ejs-grid>
+
+  </div>
+
+
+  <!-- =====================================
+       CREATE / EDIT SALESMAN DIALOG
+  ====================================== -->
+  <ejs-dialog
+    [(visible)]="isDialogVisible"
+    [header]="isEditMode ? 'Edit Salesman' : 'New Salesman'"
+    [showCloseIcon]="true"
+    [isModal]="true"
+    [width]="'650px'"
+    [closeOnEscape]="true"
+    [target]="'body'"
+    cssClass="salesman-form-dialog"
+    (close)="onCancel()">
+
+    <ng-template #content>
+
+      <form
+        [formGroup]="salesmanForm"
+        (ngSubmit)="onSaveSalesman()">
+
+        <div class="dialog-intro">
+
+          <div class="dialog-intro-icon">SM</div>
+
+          <div>
+            <h3>
+              {{ isEditMode ? 'Update Salesman Information' : 'Add New Salesman' }}
+            </h3>
+
+            <p>
+              Enter the required details below to
+              {{ isEditMode ? 'update' : 'register' }} a salesman.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <!-- Salesman Code -->
+          <div class="form-field">
+
+            <label>
+              Salesman Code <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              formControlName="salesmanCode"
+              placeholder="Example: SM001"
+              maxlength="20"
+              autocomplete="off"
+              (input)="onSalesmanCodeInput($event)"
+             >
+
+            @if (salesmanForm.get('salesmanCode')?.touched) {
+
+              @if (salesmanForm.get('salesmanCode')?.hasError('required')) {
+                <small class="error-text">
+                  Salesman code is required.
+                </small>
+              }
+
+              @if (salesmanForm.get('salesmanCode')?.hasError('maxlength')) {
+                <small class="error-text">
+                  Maximum 20 characters allowed.
+                </small>
+              }
+
+              @if (salesmanForm.get('salesmanCode')?.hasError('pattern')) {
+                <small class="error-text">
+                  Only letters and numbers are allowed.
+                </small>
+              }
+
+            }
+
+          </div>
+
+
+          <!-- Salesman Name -->
+          <div class="form-field">
+
+            <label>
+              Salesman Name <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              formControlName="salesmanName"
+              placeholder="Enter full name"
+              autocomplete="off">
+
+            @if (salesmanForm.get('salesmanName')?.touched) {
+
+              @if (salesmanForm.get('salesmanName')?.hasError('required')) {
+                <small class="error-text">
+                  Salesman name is required.
+                </small>
+              }
+
+              @if (salesmanForm.get('salesmanName')?.hasError('maxlength')) {
+                <small class="error-text">
+                  Maximum 100 characters allowed.
+                </small>
+              }
+
+              @if (salesmanForm.get('salesmanName')?.hasError('pattern')) {
+                <small class="error-text">
+                  Enter a valid name using letters, spaces, dots,
+                  apostrophes or hyphens.
+                </small>
+              }
+
+            }
+
+          </div>
+
+
+          <!-- Mobile Number -->
+          <div class="form-field">
+
+            <label>Mobile Number</label>
+
+            <input
+              type="text"
+              formControlName="mobileNo"
+              placeholder="Enter mobile number"
+              autocomplete="off">
+
+            @if (salesmanForm.get('mobileNo')?.touched) {
+
+              @if (salesmanForm.get('mobileNo')?.hasError('pattern')) {
+                <small class="error-text">
+                  Enter 7 to 15 digits.
+                </small>
+              }
+
+            }
+
+          </div>
+
+<div class="form-field">
+  <label>Email Address</label>
+
+  <input
+  type="email"
+  formControlName="email"
+  placeholder="Example:name@company.com"
+  autocomplete="off"
+  (input)="onEmailInput($event)">
+
+
+  @if (salesmanForm.get('email')?.touched) {
+
+  @if (salesmanForm.get('email')?.hasError('maxlength')) {
+    <small class="error-text">
+      Maximum 100 characters allowed.
+    </small>
+  }
+
+  @if (salesmanForm.get('email')?.hasError('invalidEmail')) {
+    <small class="error-text">
+      Enter a valid email address.
+    </small>
+  }
+
+  @if (salesmanForm.get('email')?.hasError('emailExists')) {
+    <small class="error-text">
+      This email address is already registered.
+    </small>
+  }
+
+}
+</div>
+
+          <!-- Joining Date -->
+          <div class="form-field">
+
+            <label>
+              Joining Date <span>*</span>
+            </label>
+
+            <ejs-datepicker
+              formControlName="joiningDate"
+              [max]="today"
+              placeholder="Select joining date">
+            </ejs-datepicker>
+
+            @if (salesmanForm.get('joiningDate')?.touched) {
+
+              @if (salesmanForm.get('joiningDate')?.hasError('required')) {
+                <small class="error-text">
+                  Joining date is required.
+                </small>
+              }
+
+            }
+
+          </div>
+
+
+          <!-- Status -->
+          <div class="form-field">
+
+            <label>
+              Status <span>*</span>
+            </label>
+
+            <ejs-dropdownlist
+              formControlName="status"
+              [dataSource]="formStatusOptions"
+              placeholder="Select status">
+            </ejs-dropdownlist>
+
+            @if (
+              salesmanForm.get('status')?.touched &&
+              salesmanForm.get('status')?.invalid
+            ) {
+              <small class="error-text">
+                Please select a valid status.
+              </small>
+            }
+
+          </div>
+
+        </div>
+
+
+        <!-- Dialog Buttons -->
+        <div class="dialog-actions">
+
+          <button
+            type="button"
+            class="secondary-btn"
+            (click)="onCancel()">
+
+            Cancel
+
+          </button>
+
+          @if (!isEditMode) {
+
+            <button
+              type="button"
+              class="secondary-btn"
+              (click)="onSaveAndNew()">
+
+              Save & New
+
+            </button>
+
+          }
+
+         <button
+  type="submit"
+  class="primary-btn">
+
+  <span>
+    {{ isEditMode ? 'Update Salesman' : 'Save Salesman' }}
+  </span>
+
+</button>
+
+        </div>
+
+      </form>
+
+    </ng-template>
+
+  </ejs-dialog>
+
+  
+  <!-- =====================================
+       DELETE / REMOVAL REQUEST DIALOG
+  ====================================== -->
+  <ejs-dialog
+    [(visible)]="isDeleteDialogVisible"
+    [header]="isAssignedToActiveTeam ? 'Salesman Assigned to Team' : 'Confirm Delete'"
+    [showCloseIcon]="true"
+    [isModal]="true"
+    [width]="'450px'"
+    [closeOnEscape]="true"
+    [target]="'body'"
+    cssClass="delete-confirm-dialog"
+    (close)="onCancelDelete()">
+
+    <ng-template #content>
+
+      <div class="delete-dialog-content">
+
+        <div class="delete-icon">!</div>
+
+        @if (!isAssignedToActiveTeam) {
+
+          <h3>Delete Salesman?</h3>
+
+          <p>
+            Are you sure you want to delete
+            <strong>
+              {{ selectedDeleteSalesman?.salesmanName }}
+            </strong>?
+          </p>
+
+          <p class="delete-warning">
+            This salesman will be marked as inactive and removed
+            from the active list.
+          </p>
+
+          <div class="dialog-actions">
+
+            <button
+              type="button"
+              class="secondary-btn"
+              (click)="onCancelDelete()">
+
+              Cancel
+
+            </button>
+
+            <button
+              type="button"
+              class="delete-confirm-btn"
+              (click)="onConfirmDelete()">
+
+              Delete Salesman
+
+            </button>
+
+          </div>
+
+        } @else {
+
+          <h3>Salesman Assigned to a Team</h3>
+
+          <p>
+            <strong>
+              {{ selectedDeleteSalesman?.salesmanName }}
+            </strong>
+            is currently assigned to an active marketing team
+            and cannot be deleted directly.
+          </p>
+
+          <p class="delete-warning">
+            You can send a removal request to the Marketing Team
+            Admin. The salesman will remain active until the
+            request is approved.
+          </p>
+
+          <div class="dialog-actions">
+
+            <button
+              type="button"
+              class="secondary-btn"
+              (click)="onCancelDelete()">
+
+              Cancel
+
+            </button>
+
+            <button
+              type="button"
+              class="primary-btn"
+              (click)="onConfirmDelete()">
+
+              Send Removal Request
+
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    </ng-template>
+
+  </ejs-dialog>
+
+
+</div>

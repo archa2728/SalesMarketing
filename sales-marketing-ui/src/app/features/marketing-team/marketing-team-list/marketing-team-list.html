@@ -1,0 +1,925 @@
+<div class="page-container">
+
+  <!-- Toast notification -->
+  @if (showToast) {
+    <div class="toast-notification" [ngClass]="toastType" role="status">
+      <span class="toast-message">{{ toastMessage }}</span>
+      <button
+        type="button"
+        class="toast-close"
+        aria-label="Close notification"
+        (click)="dismissNotification()">
+        &times;
+      </button>
+    </div>
+  }
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Marketing Teams</h1>
+      <p class="page-description">
+        Manage marketing teams, team leaders and members.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="openCreateDialog()">
+      <span class="button-plus">+</span>
+      New Marketing Team
+    </button>
+  </div>
+
+  
+<!-- Search and Filter -->
+<div class="filter-section">
+
+  <div class="search-box">
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Search by team code or team name..." />
+  </div>
+
+  <div class="status-filter">
+    <!-- <ejs-dropdownlist
+      [dataSource]="statusOptions"
+      [(ngModel)]="selectedStatus"
+      (change)="onStatusChange()"
+      placeholder="Filter by status"
+      [width]="'100%'">
+    </ejs-dropdownlist> -->
+    <ejs-dropdownlist
+  [dataSource]="statusOptions"
+  [(ngModel)]="selectedStatus"
+  (change)="onStatusChange($event)"
+  placeholder="Filter by status"
+  [width]="'100%'">
+</ejs-dropdownlist>
+  </div>
+
+</div>
+
+
+<!-- 
+<div class="filter-section">
+
+  <div class="search-box">
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Search by team code or team name"
+    />
+  </div>
+
+  <ejs-dropdownlist
+    [dataSource]="statusOptions"
+    [(ngModel)]="selectedStatus"
+    (change)="onStatusChange()"
+    placeholder="Filter by status"
+    [width]="'180px'">
+  </ejs-dropdownlist>
+
+</div> -->
+
+
+  <!-- Marketing Team Grid -->
+  <div class="grid-container">
+
+    <div class="grid-heading">
+      <div>
+        <h2 class="grid-title">Marketing Team List</h2>
+        <p class="grid-description">
+          View and manage your marketing teams.
+        </p>
+      </div>
+    </div>
+
+    @if (isLoading) {
+      <div class="loading-message">
+        Loading marketing teams...
+      </div>
+    } @else {
+      <ejs-grid
+        [dataSource]="filteredTeams"
+        [allowPaging]="true"
+        [allowSorting]="true"
+        [allowResizing]="true"
+        [pageSettings]="pageSettings"
+        [gridLines]="'Horizontal'">
+
+        <e-columns>
+
+          <e-column
+            field="teamCode"
+            headerText="Team Code"
+            width="125">
+            <ng-template #template let-data>
+              <a
+                class="team-code-link"
+                [routerLink]="['/marketing-team', data.id]">
+                {{ data.teamCode }}
+              </a>
+            </ng-template>
+          </e-column>
+
+          <e-column
+            field="teamName"
+            headerText="Team Name"
+            width="180">
+          </e-column>
+
+          <e-column
+            field="teamLeaderName"
+            headerText="Team Leader"
+            width="180">
+          </e-column>
+
+          <e-column
+            headerText="Members"
+            width="100"
+            textAlign="Center">
+            <ng-template #template let-data>
+              <span class="member-count">
+                {{ data.members?.length ?? 0 }}
+              </span>
+            </ng-template>
+          </e-column>
+
+          <e-column
+            field="totalTargetAmount"
+            headerText="Total Target Amount"
+            width="165"
+            textAlign="Right"
+            format="N2">
+          </e-column>
+
+          <e-column
+            field="status"
+            headerText="Status"
+            width="110"
+            textAlign="Center">
+            <ng-template #template let-data>
+              <span
+                class="status-badge"
+                [ngClass]="Number(data.status) === 1 ? 'active' : 'inactive'">
+                {{ getStatusText(data.status) }}
+              </span>
+            </ng-template>
+          </e-column>
+
+          <e-column
+            headerText="Actions"
+            width="190"
+            textAlign="Center">
+            <ng-template #template let-data>
+              <div class="grid-actions">
+
+                <button
+                  type="button"
+                  class="action-button view-button"
+                  (click)="viewTeam(data.id)">
+                  View
+                </button>
+
+                <button
+                  type="button"
+                  class="action-button edit-button"
+                  (click)="editTeam(data.id)">
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="action-button delete-button"
+                  (click)="openDeleteConfirmation(data)">
+                  Delete
+                </button>
+
+              </div>
+            </ng-template>
+          </e-column>
+
+        </e-columns>
+      </ejs-grid>
+    }
+
+    @if (!isLoading && filteredTeams.length === 0) {
+      <div class="empty-grid-message">
+        <div class="empty-grid-icon">⌕</div>
+        <h3>No marketing teams found</h3>
+        <p>Try changing your search or status filter.</p>
+      </div>
+    }
+
+  </div>
+
+  
+<!-- ========================================= -->
+<!-- PENDING SALESMAN REMOVAL REQUESTS        -->
+<!-- ========================================= -->
+
+<div class="grid-container removal-requests-container">
+
+  <div class="grid-heading">
+    <div>
+      <h2 class="grid-title">Pending Salesman Removal Requests</h2>
+      <p class="grid-description">
+        Review and manage salesman removal requests submitted by Salesman Admins.
+      </p>
+    </div>
+
+    <span class="request-count">
+      {{ removalRequests.length }} Pending
+    </span>
+  </div>
+
+  @if (isLoadingRemovalRequests) {
+
+    <div class="loading-message">
+      Loading removal requests...
+    </div>
+
+  } @else if (removalRequests.length > 0) {
+
+    <ejs-grid
+      [dataSource]="removalRequests"
+      [allowPaging]="true"
+      [allowSorting]="true"
+      [allowResizing]="true"
+      [pageSettings]="pageSettings"
+      [gridLines]="'Horizontal'">
+
+      <e-columns>
+
+        <e-column
+          field="salesmanCode"
+          headerText="Salesman Code"
+          width="125">
+        </e-column>
+
+        <e-column
+          field="salesmanName"
+          headerText="Salesman Name"
+          width="170">
+        </e-column>
+
+        <e-column
+          field="teamCode"
+          headerText="Team Code"
+          width="110">
+        </e-column>
+
+        <e-column
+          field="teamName"
+          headerText="Team Name"
+          width="150">
+        </e-column>
+
+        <e-column
+          field="requestedByUsername"
+          headerText="Requested By"
+          width="140">
+        </e-column>
+
+        <e-column
+          field="requestedDate"
+          headerText="Requested Date"
+          width="160">
+          <ng-template #template let-data>
+            {{ data.requestedDate | date:'dd-MMM-yyyy, hh:mm a' }}
+          </ng-template>
+        </e-column>
+
+        <e-column
+          headerText="Actions"
+          width="190"
+          textAlign="Center">
+
+          <ng-template #template let-data>
+
+            <div class="grid-actions">
+
+              <button
+                type="button"
+                class="action-button edit-button"
+                [disabled]="processingRequestId !== null"
+                (click)="approveRemovalRequest(data)">
+
+                @if (processingRequestId === data.id) {
+                  Processing...
+                } @else {
+                  Approve
+                }
+
+              </button>
+
+              <button
+                type="button"
+                class="action-button delete-button"
+                [disabled]="processingRequestId !== null"
+                (click)="openRejectDialog(data)">
+                Reject
+              </button>
+
+            </div>
+
+          </ng-template>
+
+        </e-column>
+
+      </e-columns>
+
+    </ejs-grid>
+
+  } @else {
+
+    <div class="empty-grid-message">
+      <div class="empty-grid-icon">✓</div>
+      <h3>No Pending Requests</h3>
+      <p>There are currently no salesman removal requests to review.</p>
+    </div>
+
+  }
+
+</div>
+
+
+  <!-- Create / Edit Marketing Team Dialog -->
+  <ejs-dialog
+    [(visible)]="isDialogVisible"
+    [header]="isEditMode ? 'Edit Marketing Team' : 'Create Marketing Team'"
+    [showCloseIcon]="true"
+    [isModal]="true"
+    [width]="'900px'"
+    [height]="'auto'"
+    [closeOnEscape]="true"
+    [target]="'body'"
+    cssClass="marketing-team-dialog"
+    (close)="onCancelEdit()">
+
+    <ng-template #content>
+
+      <form [formGroup]="teamForm" (ngSubmit)="onSaveTeam()">
+
+        <!-- Team Details -->
+        <div class="form-section-title">
+          Team Details
+        </div>
+
+        <div class="form-grid">
+
+          <!-- Team Code -->
+          <div class="form-field">
+            <label for="teamCode">
+              Team Code <span>*</span>
+            </label>
+
+            <input
+              id="teamCode"
+              type="text"
+              formControlName="teamCode"
+              placeholder="Example: TM001"
+              maxlength="20" />
+
+            @if (
+              teamForm.get('teamCode')?.touched &&
+              teamForm.get('teamCode')?.hasError('required')
+            ) {
+              <small class="error-text">Team code is required.</small>
+            }
+
+            @if (
+              teamForm.get('teamCode')?.touched &&
+              teamForm.get('teamCode')?.hasError('maxlength')
+            ) {
+              <small class="error-text">
+                Team code cannot exceed 20 characters.
+              </small>
+            }
+
+            @if (
+              teamForm.get('teamCode')?.touched &&
+              teamForm.get('teamCode')?.hasError('pattern')
+            ) {
+              <small class="error-text">
+                Only letters and numbers are allowed.
+              </small>
+            }
+          </div>
+
+          <!-- Team Name -->
+          <div class="form-field">
+            <label for="teamName">
+              Team Name <span>*</span>
+            </label>
+
+            <input
+              id="teamName"
+              type="text"
+              formControlName="teamName"
+              placeholder="Enter team name"
+              maxlength="100" />
+
+            @if (
+              teamForm.get('teamName')?.touched &&
+              teamForm.get('teamName')?.hasError('required')
+            ) {
+              <small class="error-text">Team name is required.</small>
+            }
+
+            @if (
+              teamForm.get('teamName')?.touched &&
+              teamForm.get('teamName')?.hasError('maxlength')
+            ) {
+              <small class="error-text">
+                Team name cannot exceed 100 characters.
+              </small>
+            }
+          </div>
+
+          <!-- Team Leader -->
+          <div class="form-field">
+            <label for="teamLeaderId">
+              Team Leader <span>*</span>
+            </label>
+
+            <select
+              id="teamLeaderId"
+              formControlName="teamLeaderId"
+              (change)="onTeamLeaderSelected()">
+
+              <option [ngValue]="null">Select Team Leader</option>
+
+              @for (salesman of salesmen; track salesman.id) {
+                <option [ngValue]="salesman.id">
+                  {{ salesman.salesmanCode }} - {{ salesman.salesmanName }}
+                </option>
+              }
+
+            </select>
+
+            @if (
+              teamForm.get('teamLeaderId')?.touched &&
+              teamForm.get('teamLeaderId')?.invalid
+            ) {
+              <small class="error-text">
+                Please select a team leader.
+              </small>
+            }
+
+            @if (isEditMode) {
+              <small class="help-text">
+                Team leader replacement is not available while editing.
+              </small>
+            } @else {
+              <small class="help-text">
+                The selected team leader will automatically be added as a member.
+              </small>
+            }
+          </div>
+
+          <!-- Status -->
+          <div class="form-field">
+            <label for="teamStatus">
+              Status <span>*</span>
+            </label>
+
+            <select id="teamStatus" formControlName="status">
+              <option [ngValue]="1">Active</option>
+              <option [ngValue]="2">Inactive</option>
+            </select>
+          </div>
+
+          <!-- Description -->
+          <div class="form-field full-width">
+            <label for="description">Description</label>
+
+            <textarea
+              id="description"
+              formControlName="description"
+              rows="3"
+              maxlength="500"
+              placeholder="Enter team description">
+            </textarea>
+
+            @if (
+              teamForm.get('description')?.touched &&
+              teamForm.get('description')?.hasError('maxlength')
+            ) {
+              <small class="error-text">
+                Description cannot exceed 500 characters.
+              </small>
+            }
+          </div>
+
+        </div>
+
+        <!-- Team Members -->
+        <div class="form-section-title">
+          Team Members
+        </div>
+
+        <!-- Add Member -->
+        <div class="add-member-section">
+
+          <div class="form-field">
+            <label for="selectedSalesman">Salesman</label>
+
+            <select
+              id="selectedSalesman"
+              [(ngModel)]="selectedSalesmanId"
+              [ngModelOptions]="{ standalone: true }">
+
+              <option [ngValue]="null">Select Salesman</option>
+
+              @for (salesman of salesmen; track salesman.id) {
+                <option [ngValue]="salesman.id">
+                  {{ salesman.salesmanCode }} - {{ salesman.salesmanName }}
+                </option>
+              }
+
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="memberRole">Role</label>
+
+            <select
+              id="memberRole"
+              [(ngModel)]="selectedMemberRole"
+              [ngModelOptions]="{ standalone: true }">
+
+              <option [ngValue]="2">Senior Sales Executive</option>
+              <option [ngValue]="3">Sales Executive</option>
+              <option [ngValue]="4">Trainee</option>
+
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="targetAmount">Target Amount</label>
+
+            <input
+              id="targetAmount"
+              type="number"
+              min="0"
+              step="0.01"
+              [(ngModel)]="selectedTargetAmount"
+              [ngModelOptions]="{ standalone: true }" />
+          </div>
+
+          <button
+            type="button"
+            class="add-member-button"
+            (click)="addMember()">
+            + Add Member
+          </button>
+
+        </div>
+
+        <small class="help-text">
+          Select the Team Leader first. The leader is automatically assigned
+          the Team Leader role.
+        </small>
+
+        <!-- Members Table -->
+        <div class="member-grid-container">
+
+          <table class="member-edit-table">
+
+            <thead>
+              <tr>
+                <th>Salesman Code</th>
+                <th>Salesman Name</th>
+                <th>Role</th>
+                <th>Target Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody formArrayName="members">
+
+              @for (
+                member of members.controls;
+                track $index;
+                let i = $index
+              ) {
+                <tr [formGroupName]="i">
+
+                  <td>{{ member.get('salesmanCode')?.value }}</td>
+
+                  <td>{{ member.get('salesmanName')?.value }}</td>
+
+                  <td>
+                    @if (
+                      Number(member.get('salesmanId')?.value) ===
+                      Number(teamForm.get('teamLeaderId')?.value)
+                    ) {
+                      <span class="leader-role">Team Leader</span>
+                    } @else {
+                      <select formControlName="role">
+                        <option [ngValue]="2">Senior Sales Executive</option>
+                        <option [ngValue]="3">Sales Executive</option>
+                        <option [ngValue]="4">Trainee</option>
+                      </select>
+                    }
+                  </td>
+
+                  <td>
+                    <input
+                      type="number"
+                      formControlName="targetAmount"
+                      min="0"
+                      step="0.01" />
+                  </td>
+
+                  <td>
+                    <select formControlName="status">
+                      <option [ngValue]="1">Active</option>
+                      <option [ngValue]="2">Inactive</option>
+                    </select>
+                  </td>
+
+                  <td>
+                    <button
+                      type="button"
+                      class="action-button delete-button"
+                      (click)="removeMember(i)">
+                      Remove
+                    </button>
+                  </td>
+
+                </tr>
+              }
+
+              @if (members.length === 0) {
+                <tr>
+                  <td colspan="6" class="empty-members">
+                    No team members added yet.
+                  </td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="total-target">
+          Total Members: {{ members.length }}
+        </div>
+
+        <!-- Form Actions -->
+        <div class="dialog-actions">
+
+          <button
+            type="button"
+            class="secondary-btn"
+            [disabled]="isSaving"
+            (click)="onCancelEdit()">
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button"
+            [disabled]="isSaving">
+
+            @if (isSaving) {
+              Saving...
+            } @else {
+              {{ isEditMode ? 'Save Changes' : 'Create Team' }}
+            }
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </ng-template>
+  </ejs-dialog>
+
+  <!-- Delete Confirmation Dialog -->
+ 
+<ejs-dialog
+  [(visible)]="isDeleteDialogVisible"
+  [header]="' '"
+  [showCloseIcon]="!isDeleting"
+  [isModal]="true"
+  [width]="'440px'"
+  [height]="'auto'"
+  [closeOnEscape]="!isDeleting"
+  [target]="'body'"
+  cssClass="marketing-confirm-dialog"
+  (close)="cancelDelete()">
+
+  <ng-template #content>
+
+    <div class="delete-confirm-content">
+
+      <!-- Delete Icon -->
+      <div class="delete-icon-wrapper">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6l-1 14H6L5 6"></path>
+          <path d="M10 11v6"></path>
+          <path d="M14 11v6"></path>
+          <path d="M9 6V4h6v2"></path>
+
+        </svg>
+      </div>
+
+      <!-- Heading -->
+      <h3>Delete Marketing Team?</h3>
+
+      <p class="delete-description">
+        Are you sure you want to delete this marketing team?
+        Please review the details before proceeding.
+      </p>
+
+      <!-- Selected Team Details -->
+      <div class="delete-team-details">
+
+        <div class="delete-team-info">
+          <span class="delete-detail-label">TEAM CODE</span>
+          <strong>{{ teamToDelete?.teamCode }}</strong>
+        </div>
+
+        <div class="delete-team-info">
+          <span class="delete-detail-label">TEAM NAME</span>
+          <strong>{{ teamToDelete?.teamName }}</strong>
+        </div>
+
+      </div>
+
+      <!-- Warning -->
+      <div class="delete-warning">
+        <span class="warning-symbol">!</span>
+
+        <span>
+          This action cannot be undone.
+        </span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="delete-confirm-actions">
+
+        <button
+          type="button"
+          class="delete-cancel-btn"
+          [disabled]="isDeleting"
+          (click)="cancelDelete()">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="delete-confirm-btn"
+          [disabled]="isDeleting"
+          (click)="confirmDeleteTeam()">
+
+          <span *ngIf="!isDeleting">Delete Team</span>
+
+          <span *ngIf="isDeleting" class="delete-loading">
+            <span class="delete-spinner"></span>
+            Deleting...
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+</ejs-dialog>
+
+
+<!-- ========================================= -->
+<!-- REJECT SALESMAN REMOVAL REQUEST DIALOG   -->
+<!-- ========================================= -->
+
+<ejs-dialog
+  [(visible)]="isRejectDialogVisible"
+  [header]="'Reject Removal Request'"
+  [showCloseIcon]="!isRejecting"
+  [isModal]="true"
+  [width]="'500px'"
+  [height]="'auto'"
+  [closeOnEscape]="!isRejecting"
+  [target]="'body'"
+  cssClass="removal-reject-dialog"
+  (close)="cancelRejectDialog()">
+
+  <ng-template #content>
+
+    <div class="reject-request-content">
+
+      <h3>Reject Salesman Removal?</h3>
+
+      @if (selectedRemovalRequest) {
+
+        <p class="delete-description">
+          You are rejecting the removal request for:
+        </p>
+
+        <div class="delete-team-details">
+
+          <div class="delete-team-info">
+            <span class="delete-detail-label">SALESMAN</span>
+            <strong>
+              {{ selectedRemovalRequest.salesmanName }}
+            </strong>
+          </div>
+
+          <div class="delete-team-info">
+            <span class="delete-detail-label">SALESMAN CODE</span>
+            <strong>
+              {{ selectedRemovalRequest.salesmanCode }}
+            </strong>
+          </div>
+
+          <div class="delete-team-info">
+            <span class="delete-detail-label">MARKETING TEAM</span>
+            <strong>
+              {{ selectedRemovalRequest.teamName }}
+            </strong>
+          </div>
+
+        </div>
+
+      }
+
+      <div class="form-field full-width">
+
+        <label for="rejectionReason">
+          Rejection Reason <span>*</span>
+        </label>
+
+        <textarea
+          id="rejectionReason"
+          [(ngModel)]="rejectionReason"
+          [ngModelOptions]="{ standalone: true }"
+          rows="4"
+          maxlength="500"
+          placeholder="Enter the reason for rejecting this request..."
+          [disabled]="isRejecting">
+        </textarea>
+
+        <small class="help-text">
+          {{ rejectionReason.length }} / 500 characters
+        </small>
+
+      </div>
+
+      <div class="delete-confirm-actions">
+
+        <button
+          type="button"
+          class="delete-cancel-btn"
+          [disabled]="isRejecting"
+          (click)="cancelRejectDialog()">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="delete-confirm-btn"
+          [disabled]="isRejecting || !rejectionReason.trim()"
+          (click)="submitRejectRequest()">
+
+          @if (isRejecting) {
+            Rejecting...
+          } @else {
+            Confirm Rejection
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+</ejs-dialog>
+
+</div>
