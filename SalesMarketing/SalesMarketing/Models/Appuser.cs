@@ -9,7 +9,8 @@ public partial class Appuser
 
     public string Username { get; set; } = null!;
 
-    public string Password { get; set; } = null!;
+    //public string Password { get; set; } = null!;
+    public string PasswordHash { get; set; } = null!;
 
     public short Adminrole { get; set; }
 }

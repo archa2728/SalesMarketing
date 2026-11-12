@@ -35,9 +35,12 @@ public partial class SalesMarketingDbContext : DbContext
                 .UseIdentityAlwaysColumn()
                 .HasColumnName("id");
             entity.Property(e => e.Adminrole).HasColumnName("adminrole");
-            entity.Property(e => e.Password)
-                .HasMaxLength(255)
-                .HasColumnName("password");
+            //entity.Property(e => e.Password)
+            //    .HasMaxLength(255)
+            //    .HasColumnName("password");
+            entity.Property(e => e.PasswordHash)
+    .HasMaxLength(255)
+    .HasColumnName("passwordhash");
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnName("username");

@@ -28,7 +28,9 @@ namespace SalesMarketing.Services
                 .GetUserByUsernameAsync(request.Username);
 
             // Validate username and password
-            if (user == null || user.Password != request.Password)
+            //if (user == null || user.Password != request.Password)
+            if (user == null ||
+    !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
                 throw new UnauthorizedAccessException(
                     "Invalid username or password.");
