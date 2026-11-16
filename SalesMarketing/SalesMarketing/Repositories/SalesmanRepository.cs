@@ -14,7 +14,6 @@ namespace SalesMarketing.Repositories
             _context = context;
         }
 
-
         public async Task<List<Salesman>> GetAllAsync()
         {
             return await _context.Salesmen
@@ -24,25 +23,22 @@ namespace SalesMarketing.Repositories
                 .ToListAsync();
         }
 
-
         public async Task<Salesman?> GetByIdAsync(long id)
         {
             return await _context.Salesmen
                 .FirstOrDefaultAsync(s => s.Id == id && !s.Isarchived);
         }
-
         public async Task<bool> CodeExistsAsync(string code)
         {
             return await _context.Salesmen
-                .AnyAsync(s => s.Salesmancode == code && !s.Isarchived);
+                .AnyAsync(s => s.Salesmancode == code);
         }
 
         public async Task<bool> CodeExistsForOtherAsync(string code, long id)
         {
             return await _context.Salesmen
                 .AnyAsync(s => s.Salesmancode == code
-                            && s.Id != id
-                            && !s.Isarchived);
+                            && s.Id != id);
         }
 
         // Add a salesman
@@ -65,11 +61,33 @@ namespace SalesMarketing.Repositories
                             && !d.Isarchived);
         }
 
-        // Delete a salesman
+        public async Task<bool> HasActiveMembershipInActiveTeamAsync(long salesmanId)
+        {
+            return await _context.Marketingteamdetails
+                .AnyAsync(d =>
+                    d.Salesmanid == salesmanId &&
+                    d.Status == 1 &&
+                    !d.Isarchived &&
+                    d.Marketingteam.Status == 1 &&
+                    !d.Marketingteam.Isarchived);
+        }
+
         public async Task DeleteAsync(Salesman salesman)
         {
             salesman.Isarchived = true;
             salesman.Status = 2; // Inactive
+
+            // Archive all remaining active membership records.
+            var memberships = await _context.Marketingteamdetails
+                .Where(d => d.Salesmanid == salesman.Id && !d.Isarchived)
+                .ToListAsync();
+
+            foreach (var member in memberships)
+            {
+                member.Isarchived = true;
+                member.Status = 2;
+                member.Wasactivebeforeteamdeactivation = false;
+            }
 
             await _context.SaveChangesAsync();
         }
@@ -117,6 +135,51 @@ namespace SalesMarketing.Repositories
                .ToListAsync();
 
             return (items, totalCount);
+        }
+
+
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+
+            return await _context.Salesmen
+                .AnyAsync(s =>
+                    s.Email != null &&
+                    s.Email.ToLower() == normalizedEmail);
+        }
+
+        public async Task<bool> EmailExistsForOtherAsync(
+            string email, long id)
+        {
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+
+            return await _context.Salesmen
+                .AnyAsync(s =>
+                    s.Id != id &&
+                    s.Email != null &&
+                    s.Email.ToLower() == normalizedEmail);
+        }
+
+        public async Task<bool> MobileExistsAsync(string mobileNo)
+        {
+            var normalizedMobile = mobileNo.Trim();
+
+            return await _context.Salesmen
+                .AnyAsync(s =>
+                    s.Mobileno != null &&
+                    s.Mobileno.Trim() == normalizedMobile);
+        }
+
+        public async Task<bool> MobileExistsForOtherAsync(
+            string mobileNo, long id)
+        {
+            var normalizedMobile = mobileNo.Trim();
+
+            return await _context.Salesmen
+                .AnyAsync(s =>
+                    s.Id != id &&
+                    s.Mobileno != null &&
+                    s.Mobileno.Trim() == normalizedMobile);
         }
 
     }

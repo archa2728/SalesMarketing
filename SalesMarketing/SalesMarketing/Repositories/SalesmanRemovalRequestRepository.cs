@@ -63,6 +63,14 @@ namespace SalesMarketing.Repositories
                            SalesmanCode = salesman.Salesmancode,
                            SalesmanName = salesman.Salesmanname,
 
+                           Role = _context.Marketingteamdetails
+    .Where(d =>
+        d.Marketingteamid == team.Id &&
+        d.Salesmanid == salesman.Id &&
+        !d.Isarchived)
+    .Select(d => d.Role)
+    .FirstOrDefault(),
+
                            MarketingTeamId = team.Id,
                            TeamCode = team.Teamcode,
                            TeamName = team.Teamname,

@@ -20,6 +20,7 @@ public partial class SalesMarketingDbContext : DbContext
 
     public virtual DbSet<Salesman> Salesmen { get; set; }
     public virtual DbSet<Salesmanremovalrequest> Salesmanremovalrequests { get; set; }
+    public virtual DbSet<AuditLog> Auditlogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -112,6 +113,9 @@ public partial class SalesMarketingDbContext : DbContext
                 .HasForeignKey(d => d.Salesmanid)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_teamdetail_salesman");
+
+            entity.Property(e => e.Wasactivebeforeteamdeactivation)
+    .HasColumnName("wasactivebeforeteamdeactivation");
         });
 
         modelBuilder.Entity<Salesman>(entity =>
@@ -212,6 +216,49 @@ public partial class SalesMarketingDbContext : DbContext
                 .HasConstraintName("fk_removalrequest_reviewedby");
         });
 
+        modelBuilder.Entity<AuditLog>(entity =>
+        {
+            entity.HasKey(e => e.Id)
+                .HasName("auditlog_pkey");
+
+            entity.ToTable("auditlog");
+
+            entity.Property(e => e.Id)
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("id");
+
+            entity.Property(e => e.Userid)
+                .HasColumnName("userid");
+
+            entity.Property(e => e.Action)
+                .HasMaxLength(50)
+                .HasColumnName("action");
+
+            entity.Property(e => e.Entityname)
+                .HasMaxLength(100)
+                .HasColumnName("entityname");
+
+            entity.Property(e => e.Entityid)
+                .HasColumnName("entityid");
+
+            entity.Property(e => e.Oldvalues)
+                .HasColumnType("jsonb")
+                .HasColumnName("oldvalues");
+
+            entity.Property(e => e.Newvalues)
+                .HasColumnType("jsonb")
+                .HasColumnName("newvalues");
+
+            entity.Property(e => e.Createddate)
+                .HasDefaultValueSql("now()")
+                .HasColumnName("createddate");
+
+            entity.HasOne<Appuser>()
+                .WithMany()
+                .HasForeignKey(e => e.Userid)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("fk_auditlog_appuser");
+        });
 
         OnModelCreatingPartial(modelBuilder);
     }

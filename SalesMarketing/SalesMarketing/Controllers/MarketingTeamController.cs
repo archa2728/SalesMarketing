@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SalesMarketing.DTOs;
 using SalesMarketing.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +15,8 @@ namespace SalesMarketing.Controllers
         private readonly ISalesmanRemovalRequestService _removalRequestService;
 
         public MarketingTeamController(
-            IMarketingTeamService service, ISalesmanRemovalRequestService removalRequestService)
+            IMarketingTeamService service,
+            ISalesmanRemovalRequestService removalRequestService)
         {
             _service = service;
             _removalRequestService = removalRequestService;
@@ -24,10 +24,19 @@ namespace SalesMarketing.Controllers
 
         // GET: api/MarketingTeam
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? search = null,
+            [FromQuery] short? status = null)
         {
-            var teams = await _service.GetAllAsync();
-            return Ok(teams);
+            var result = await _service.GetAllAsync(
+                pageNumber,
+                pageSize,
+                search,
+                status);
+
+            return Ok(result);
         }
 
         // GET: api/MarketingTeam/1
@@ -67,7 +76,7 @@ namespace SalesMarketing.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-            catch (DbUpdateException)
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
             {
                 return Conflict(new
                 {
@@ -106,7 +115,7 @@ namespace SalesMarketing.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-            catch (DbUpdateException)
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
             {
                 return Conflict(new
                 {
@@ -124,7 +133,8 @@ namespace SalesMarketing.Controllers
             try
             {
                 bool updated = await _service.UpdateStatusAsync(
-                    id, dto.Status);
+                    id,
+                    dto.Status);
 
                 if (!updated)
                     return NotFound(new
@@ -161,6 +171,7 @@ namespace SalesMarketing.Controllers
             });
         }
 
+        // POST: api/MarketingTeam/1/members
         [HttpPost("{teamId:long}/members")]
         public async Task<IActionResult> AddMember(
             long teamId,
@@ -189,7 +200,7 @@ namespace SalesMarketing.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-            catch (DbUpdateException)
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
             {
                 return Conflict(new
                 {
@@ -210,7 +221,9 @@ namespace SalesMarketing.Controllers
 
         // PUT: api/MarketingTeam/removal-requests/1/approve
         [HttpPut("removal-requests/{id:long}/approve")]
-        public async Task<IActionResult> ApproveRemovalRequest(long id)
+        public async Task<IActionResult> ApproveRemovalRequest(
+            long id,
+            [FromBody] ApproveSalesmanRemovalRequestDto dto)
         {
             try
             {
@@ -227,7 +240,9 @@ namespace SalesMarketing.Controllers
 
                 bool approved =
                     await _removalRequestService.ApproveRequestAsync(
-                        id, reviewedBy);
+                        id,
+                        reviewedBy,
+                        dto.ReplacementTeamLeaderId);
 
                 if (!approved)
                 {
@@ -295,6 +310,5 @@ namespace SalesMarketing.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
     }
 }

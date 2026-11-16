@@ -4,7 +4,11 @@ namespace SalesMarketing.Services.Interfaces
 {
     public interface IMarketingTeamService
     {
-        Task<List<MarketingTeamResponseDto>> GetAllAsync();
+        Task<MarketingTeamPageResponseDto> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            string? search,
+            short? status);
 
         Task<MarketingTeamResponseDto?> GetByIdAsync(long id);
 
@@ -15,14 +19,12 @@ namespace SalesMarketing.Services.Interfaces
             long id,
             UpdateMarketingTeamDto dto);
 
-        Task<bool> UpdateStatusAsync(
-            long id,
-            short status);
+        Task<bool> UpdateStatusAsync(long id, short status);
 
         Task<bool> DeleteAsync(long id);
 
         Task<bool> AddMemberAsync(
-    long teamId,
-    AddMarketingTeamMemberDto dto);
+            long teamId,
+            AddMarketingTeamMemberDto dto);
     }
 }

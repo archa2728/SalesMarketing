@@ -24,6 +24,18 @@ namespace SalesMarketing.Repositories.Interfaces
 
         Task<bool> IsAssignedToTeamAsync(long salesmanId);
 
+        Task<bool> HasActiveMembershipInActiveTeamAsync(long salesmanId);
+
         Task DeleteAsync(Salesman salesman);
+
+
+        Task<bool> EmailExistsAsync(string email);
+
+        Task<bool> EmailExistsForOtherAsync(string email, long id);
+
+        Task<bool> MobileExistsAsync(string mobileNo);
+
+        Task<bool> MobileExistsForOtherAsync(string mobileNo, long id);
+
     }
 }
