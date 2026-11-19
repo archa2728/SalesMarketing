@@ -7,7 +7,7 @@
         public long SalesmanId { get; set; }
         public string SalesmanCode { get; set; } = string.Empty;
         public string SalesmanName { get; set; } = string.Empty;
-
+        public short Role { get; set; }
         public long MarketingTeamId { get; set; }
         public string TeamCode { get; set; } = string.Empty;
         public string TeamName { get; set; } = string.Empty;

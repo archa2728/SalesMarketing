@@ -13,8 +13,9 @@ namespace SalesMarketing.Services.Interfaces
             GetPendingRequestsAsync();
 
         Task<bool> ApproveRequestAsync(
-            long requestId,
-            long reviewedBy);
+      long requestId,
+      long reviewedBy,
+      long? replacementTeamLeaderId);
 
         Task<bool> RejectRequestAsync(
             long requestId,

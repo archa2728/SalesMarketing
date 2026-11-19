@@ -4,7 +4,11 @@ namespace SalesMarketing.Repositories.Interfaces
 {
     public interface IMarketingTeamRepository
     {
-        Task<List<Marketingteam>> GetAllAsync();
+        Task<(List<Marketingteam> Items, int TotalCount)> GetPagedAsync(
+            int pageNumber,
+            int pageSize,
+            string? search,
+            short? status);
 
         Task<Marketingteam?> GetByIdAsync(long id);
 
@@ -19,5 +23,7 @@ namespace SalesMarketing.Repositories.Interfaces
         Task DeleteAsync(Marketingteam team);
 
         Task<Marketingteam?> GetActiveTeamForSalesmanAsync(long salesmanId);
+
+        Task<Marketingteam?> GetByIdIncludingArchivedMembersAsync(long id);
     }
 }

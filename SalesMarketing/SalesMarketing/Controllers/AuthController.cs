@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using SalesMarketing.DTOs;
 using SalesMarketing.Services.Interfaces;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace SalesMarketing.Controllers
 {
@@ -16,23 +18,13 @@ namespace SalesMarketing.Controllers
         }
 
         [HttpPost("login")]
+        [EnableRateLimiting("LoginRateLimit")]
         public async Task<IActionResult> Login(
             [FromBody] LoginRequestDto request)
         {
-            try
-            {
-                var response = await _authService.LoginAsync(request);
+            var response = await _authService.LoginAsync(request);
 
-                return Ok(response);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new
-                {
-                    message = ex.Message
-                });
-            }
+            return Ok(response);
         }
-
     }
 }

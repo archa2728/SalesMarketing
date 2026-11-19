@@ -19,6 +19,8 @@ public partial class Marketingteamdetail
 
     public bool Isarchived { get; set; }
 
+    public bool Wasactivebeforeteamdeactivation { get; set; }
+
     public virtual Marketingteam Marketingteam { get; set; } = null!;
 
     public virtual Salesman Salesman { get; set; } = null!;
